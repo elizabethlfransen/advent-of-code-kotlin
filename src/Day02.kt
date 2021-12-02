@@ -27,6 +27,12 @@ fun parseMovement(line: String): Movement {
 }
 
 fun main() {
+    fun reduceMovement(input: List<String>, reducer: (position: Position, movement: Movement) -> Position) =
+        input
+            .map(::parseMovement)
+            .fold(Position(), reducer)
+            .let{ position -> position.depth * position.horizontal }
+
     fun part1Apply(position: Position, movement: Movement) = when (movement.direction) {
         Direction.FORWARD ->
             position + Position(horizontal = movement.amount)
@@ -37,15 +43,23 @@ fun main() {
     }
 
     fun part1(input: List<String>): Int {
-        return input
-            .map(::parseMovement)
-            .fold(Position(), ::part1Apply)
-            .let { p -> p.depth * p.horizontal }
+        return reduceMovement(input, ::part1Apply)
+    }
+
+    fun part2Apply(position: Position, movement: Movement) = when (movement.direction) {
+        Direction.FORWARD ->
+            position + Position(
+                horizontal = movement.amount,
+                depth = position.aim * movement.amount
+            )
+        Direction.DOWN ->
+            position + Position(aim = movement.amount)
+        Direction.UP ->
+            position + Position(aim = -movement.amount)
     }
 
     fun part2(input: List<String>): Int {
-        // TODO
-        return input.size
+        return reduceMovement(input, ::part2Apply)
     }
 
     // test if implementation meets criteria from the description, like:
@@ -53,6 +67,7 @@ fun main() {
     check(part1(testInput) == 150)
 
     val input = readInput("Day02")
+    check(part2(testInput) == 900)
     println(part1(input))
     println(part2(input))
 }
