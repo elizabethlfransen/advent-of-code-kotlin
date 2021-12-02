@@ -1,6 +1,5 @@
 fun main() {
     fun part1(input: List<String>): Int {
-        // empty check
         val depths = input.map(String::toInt)
         return depths
             .filterIndexed { index, depth ->
