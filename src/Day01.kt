@@ -10,7 +10,18 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        var depths = input.map(String::toInt)
+        depths = depths
+            .mapIndexed { index, depth ->
+                if (index < 2)
+                    return@mapIndexed null // partial
+                depth + depths[index - 1] + depths[index - 2]
+            }
+            .filterNotNull()
+        return depths.filterIndexed { index, depthSum ->
+            index != 0 && depthSum > depths[index - 1]
+        }
+            .count()
     }
 
     // test if implementation meets criteria from the description, like:
