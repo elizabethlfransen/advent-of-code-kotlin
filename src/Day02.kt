@@ -36,34 +36,30 @@ fun main() {
             .fold(Position(), reducer)
             .let { position -> position.depth * position.horizontal }
 
-    fun part1(input: List<String>): Int {
-        return reduceMovement(input) { position, movement ->
-            when (movement.direction) {
-                Direction.FORWARD ->
-                    position + Position(horizontal = movement.amount)
-                Direction.DOWN ->
-                    position + Position(depth = movement.amount)
-                Direction.UP ->
-                    position + Position(depth = -movement.amount)
-            }
+    fun part1(input: List<String>): Int = reduceMovement(input) { position, movement ->
+        when (movement.direction) {
+            Direction.FORWARD ->
+                position + Position(horizontal = movement.amount)
+            Direction.DOWN ->
+                position + Position(depth = movement.amount)
+            Direction.UP ->
+                position + Position(depth = -movement.amount)
         }
     }
 
-    fun part2(input: List<String>): Int {
-        return reduceMovement(input) { position, movement ->
-            when (movement.direction) {
-                Direction.FORWARD ->
-                    position + Position(
-                        horizontal = movement.amount,
-                        depth = position.aim * movement.amount
-                    )
-                Direction.DOWN ->
-                    position + Position(aim = movement.amount)
-                Direction.UP ->
-                    position + Position(aim = -movement.amount)
-            }
-
+    fun part2(input: List<String>): Int = reduceMovement(input) { position, movement ->
+        when (movement.direction) {
+            Direction.FORWARD ->
+                position + Position(
+                    horizontal = movement.amount,
+                    depth = position.aim * movement.amount
+                )
+            Direction.DOWN ->
+                position + Position(aim = movement.amount)
+            Direction.UP ->
+                position + Position(aim = -movement.amount)
         }
+
     }
 
     // test if implementation meets criteria from the description, like:
