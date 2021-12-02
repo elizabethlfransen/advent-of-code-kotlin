@@ -1,3 +1,5 @@
+typealias Reducer<T, U> = (acc: T, i: U) -> T
+
 data class Position(
     val depth: Int = 0,
     val horizontal: Int = 0,
@@ -26,8 +28,9 @@ fun parseMovement(line: String): Movement {
     return Movement(parts[1].toInt(), Direction.valueOf(parts[0].uppercase()))
 }
 
+
 fun main() {
-    fun reduceMovement(input: List<String>, reducer: (position: Position, movement: Movement) -> Position) =
+    fun reduceMovement(input: List<String>, reducer: Reducer<Position, Movement>) =
         input
             .map(::parseMovement)
             .fold(Position(), reducer)
