@@ -1,14 +1,13 @@
 data class Position(
     val depth: Int = 0,
-    val horizontal: Int = 0
+    val horizontal: Int = 0,
+    val aim: Int = 0,
 ) {
     operator fun plus(other: Position) = Position(
         depth + other.depth,
-        horizontal + other.horizontal
+        horizontal + other.horizontal,
+        aim + other.aim
     )
-
-    operator fun plus(movement: Movement) =
-        movement.apply(this)
 }
 
 enum class Direction {
@@ -20,17 +19,7 @@ enum class Direction {
 data class Movement(
     val amount: Int,
     val direction: Direction
-) {
-    fun apply(position: Position) =
-        when (direction) {
-            Direction.FORWARD ->
-                position + Position(horizontal = amount)
-            Direction.DOWN ->
-                position + Position(depth = amount)
-            Direction.UP ->
-                position + Position(depth = -amount)
-        }
-}
+)
 
 fun parseMovement(line: String): Movement {
     val parts = line.split(' ')
@@ -38,11 +27,19 @@ fun parseMovement(line: String): Movement {
 }
 
 fun main() {
+    fun part1Apply(position: Position, movement: Movement) = when (movement.direction) {
+        Direction.FORWARD ->
+            position + Position(horizontal = movement.amount)
+        Direction.DOWN ->
+            position + Position(depth = movement.amount)
+        Direction.UP ->
+            position + Position(depth = -movement.amount)
+    }
 
     fun part1(input: List<String>): Int {
         return input
             .map(::parseMovement)
-            .fold(Position(), Position::plus)
+            .fold(Position(), ::part1Apply)
             .let { p -> p.depth * p.horizontal }
     }
 
